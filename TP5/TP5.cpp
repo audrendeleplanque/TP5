@@ -12,7 +12,7 @@ int main(){
 	vector<string> listeVilles;
 	vector<vector<int>> matriceDistance;
 	int capaciteCamion = 0;
-	int nolbreObjetDispo = 0;
+	int nombreColisDispo = 0;
 	int nombreDeVilles = 0;
 
 	// ----- Introduction -----
@@ -25,8 +25,8 @@ int main(){
 
 	// ----- Question 2 -----
 	cout << "\t\t\t\t\tReponse a la question 2 : " << endl;
-	ifstream fluxColis("C:/Users/audre/OneDrive/Documents/Algorithmes avancés/TP5/infos/5colis30capacite.txt"); //ouverture du ficher des colis
-	ifstream fluxVilles("C:/Users/audre/OneDrive/Documents/Algorithmes avancés/TP5/infos/4villes.txt"); // ouverture du ficher des villes
+	ifstream fluxColis("C:/Users/audre/Source/Repos/TP5/infos/5colis30capacite.txt"); //ouverture du ficher des colis
+	ifstream fluxVilles("C:/Users/audre/Source/Repos/TP5/infos/4villes.txt"); // ouverture du ficher des villes
 
 	cout << "\t\t\t\t\tProbleme 1 : " << endl << endl;
 
@@ -40,8 +40,8 @@ int main(){
 		tuple <int, int> VolBenef; //|
 
 		while (fluxColis >> element) { //tant qu'il y a du texte à lire
-			if (nolbreObjetDispo == 0 && capaciteCamion != 0) {
-				nolbreObjetDispo = element; //objetDisponible prend la deuxieme valeur du fichier
+			if (nombreColisDispo == 0 && capaciteCamion != 0) {
+				nombreColisDispo = element; //objetDisponible prend la deuxieme valeur du fichier
 			}
 			else if (capaciteCamion == 0) {
 				capaciteCamion = element; //capacite prend la premiere valeur du fichier
@@ -70,7 +70,7 @@ int main(){
 		// Map Colis OK !
 		//affichage de la map des colis
 		cout << "La camion a une capacite de : " << capaciteCamion;
-		cout << "\nLe nombre d'objet disponible est : " << nolbreObjetDispo;
+		cout << "\nLe nombre d'objet disponible est : " << nombreColisDispo;
 		map<int, tuple<int,int>>::iterator itr;
 		cout << "\nLa map mapColis est :\n";
 		cout << "INDEX\tCONSO\tBENEF\n";
@@ -146,12 +146,16 @@ int main(){
 
 	cout << "\t\t\t\t\tProbleme 1 : " << endl << endl;
 
-	multimap<float, int> mapColisQ3;
+	
 	map<int, tuple<int, int>>::iterator itr;
+	multimap<float, int> mapColisQ3; 
+	multimap<float, int> mapColisQ3backup;
 	multimap<float, int>::iterator iter;
+	vector<int> colisDansLeCamion;
 	float benefvol = 0;
 	int benef = 0;
 	int vol = 0;
+	int index = 0;
 
 	for (itr = mapColis.begin(); itr != mapColis.end(); ++itr) {
 		benef = get<1>(itr->second);
@@ -160,8 +164,21 @@ int main(){
 		mapColisQ3.insert(pair<float, int>(benefvol, itr->first));
 	}
 
-	for (iter = mapColisQ3.begin(); iter != mapColisQ3.end(); iter++) {
-		cout << "\t" << iter->first << "\t" << iter->second << endl;
+	for (iter = mapColisQ3.begin(); iter != mapColisQ3.end(); ++iter) {
+		cout << iter -> first << "/" << iter -> second << endl;
+	}
+
+	cout << endl;
+
+	for (iter = mapColisQ3.begin(); iter != mapColisQ3.end(); ++iter) {
+		index = iter->second;
+		cout << index << endl;
+	}
+	
+	
+
+	for (auto i: colisDansLeCamion) {
+		cout << i << endl;
 	}
 
 	return 0;
