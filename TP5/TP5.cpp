@@ -70,7 +70,7 @@ int main(){
 		// Map Colis OK !
 		//affichage de la map des colis
 		cout << "La camion a une capacite de : " << capaciteCamion;
-		cout << "\nLe nombre d'objet disponible est : " << nombreColisDispo;
+		cout << "\nLe nombre d'objet disponible est : " << nombreColisDispo << endl;
 		map<int, tuple<int,int>>::iterator itr;
 		cout << "\nLa map mapColis est :\n";
 		cout << "INDEX\tCONSO\tBENEF\n";
@@ -121,17 +121,21 @@ int main(){
 			}
 		}
 
-		cout << "Le nombre de villes est le suivant : " << nombreDeVilles << endl;
+		cout << "Le nombre de villes est : " << nombreDeVilles << endl << endl;
 
-		cout << "La matrice des distances est la suivante :" << endl;
-		for (int i = 0; i < 4; i++) //affichage de la matrice
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				cout << matriceDistance[i][j] << " ";
-			}
-			cout << endl;
+		for (auto villes : listeVilles) {
+			cout << villes << "  ";
 		}
+
+		cout << "\n\nLa matrice des distances est la suivante :" << endl;
+		for (int i = 0; i < 4; i++)						// |				
+		{												// |
+			for (int j = 0; j < 4; j++)					// |
+			{											// |
+				cout << matriceDistance[i][j] << " ";	// | affichage de la matrice
+			}											// |
+			cout << endl;								// |
+		}												// |
 		
 	}
 	else {
@@ -146,42 +150,79 @@ int main(){
 
 	cout << "\t\t\t\t\tProbleme 1 : " << endl << endl;
 
-	
-	map<int, tuple<int, int>>::iterator itr;
-	multimap<float, int> mapColisQ3; 
-	multimap<float, int> mapColisQ3backup;
-	multimap<float, int>::iterator iter;
-	vector<int> colisDansLeCamion;
-	float benefvol = 0;
-	int benef = 0;
-	int vol = 0;
-	int index = 0;
+	multimap<float, int> mapColisQ3;			// |
+	vector<int> colisDansLeCamion;				// |
+												// | Déclaration des variables nécéssaires
+	float benefvol = 0;							// |
+	int benef = 0;								// |
+	int vol = 0;								// |
+	int index = -1;								// |
 
-	for (itr = mapColis.begin(); itr != mapColis.end(); ++itr) {
-		benef = get<1>(itr->second);
-		vol = get<0>(itr->second);
-		benefvol = static_cast<float>(benef)/static_cast<float>(vol);
-		mapColisQ3.insert(pair<float, int>(benefvol, itr->first));
-	}
+	for (auto itr = mapColis.begin(); itr != mapColis.end(); ++itr) {		// |
+		benef = get<1>(itr->second);									// |
+		vol = get<0>(itr->second);										// |
+		benefvol = static_cast<float>(benef)/static_cast<float>(vol);	// | Création de la mapColisQ3
+		mapColisQ3.insert(pair<float, int>(benefvol, itr->first));		// |
+	}																	// |
 
-	for (iter = mapColisQ3.begin(); iter != mapColisQ3.end(); ++iter) {
-		cout << iter -> first << "/" << iter -> second << endl;
-	}
+
+	cout << "Matrice mapColisQ3 (a l'envers):" << endl;
+	for (auto iter = mapColisQ3.rbegin(); iter != mapColisQ3.rend(); ++iter) {		// |
+		cout << iter -> first << "/" << iter -> second << endl;				// | Affichage de la mapColisQ3
+	}																		// |
 
 	cout << endl;
 
-	for (iter = mapColisQ3.begin(); iter != mapColisQ3.end(); ++iter) {
-		index = iter->second;
-		cout << index << endl;
-	}
+	auto it = mapColisQ3.rbegin();
 	
-	
+	while(capaciteCamion > 0 && it != mapColisQ3.rend()){	// |
+		index = it->second;									// |
+		if (capaciteCamion > get<0>(mapColis[index])) {		// |
+			capaciteCamion -= get<0>(mapColis[index]);		// |
+			colisDansLeCamion.push_back(index);				// |
+			++it;											// | Chargement du camion
+		}													// |
+		else {												// |
+			++it;											// |
+		}													// |
+	}														// |
 
-	for (auto i: colisDansLeCamion) {
-		cout << i << endl;
-	}
+	cout << "Affichage des colis dans le camion : " << endl;	// |
+	for (auto i: colisDansLeCamion) {							// | Affichage du contenu du camion
+		cout << i << endl;										// |
+	}															// |
 
-	return 0;
+
+	cout << "\t\t\t\t\tProbleme 2 : " << endl << endl;
+
+	int resteVilles = nombreDeVilles - 1;
+	auto test = find(listeVilles.begin(), listeVilles.end(), "Lens");
+	index = distance(listeVilles.begin(), test);
+	int distanceMin = 0;
+
+	/*while (resteVilles > 0) {
+		auto min1 = *min_element(matriceDistance.at(index).begin(), matriceDistance.at(index).end() - (nombreDeVilles - index));
+		auto min2 = *min_element(matriceDistance.at(index).begin() + (index + 1), matriceDistance.at(index).end());
+
+		if (min1 < min2 && min1 != 0) {
+			distanceMin = min1;
+		}
+		else {
+			distanceMin = min2;
+		}
+		cout << distanceMin << endl;
+		resteVilles--;
+	}*/
+
+	cout << endl;
+
+	vector<int>testv = {1};
+
+	int minimum = *min_element(testv.begin(), testv.end());
+
+	cout << minimum << endl;
+
+	return 0; //fin du main
 }
 
 

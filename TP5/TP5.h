@@ -10,6 +10,7 @@
 #include <vector>
 #include <sstream>
 #include <tuple>
+#include <algorithm>
 
 
 // TODO: Référencez ici les en-têtes supplémentaires nécessaires à votre programme.
