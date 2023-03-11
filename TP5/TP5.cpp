@@ -223,6 +223,8 @@ int main(){
 	cout << minimum << endl;
 
 	return 0; //fin du main
+
+	//test
 }
 
 
