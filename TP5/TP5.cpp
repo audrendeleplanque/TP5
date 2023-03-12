@@ -143,20 +143,22 @@ int main(){
 	}
 	// ----- Fin question 2 -----
 	
+	// ------------------------------------------------------------------------------------------------------------------
 
-	// ----- Question 3 ----- 
+	// ----- Question 3 & 4 ----- 
 
-	cout << "\t\t\t\t\tReponse a la question 3 : " << endl;
+	cout << "\t\t\t\t\tReponse a la question 3 et 4: " << endl;
 
 	cout << "\t\t\t\t\tProbleme 1 : " << endl << endl;
 
 	multimap<float, int> mapColisQ3;			// |
 	vector<int> colisDansLeCamion;				// |
-												// | Déclaration des variables nécéssaires
+												// | 
 	float benefvol = 0;							// |
-	int benef = 0;								// |
+	int benef = 0;								// | Déclaration des variables nécéssaires
 	int vol = 0;								// |
 	int index = -1;								// |
+	int beneficeTotal = 0;						// |
 
 	for (auto itr = mapColis.begin(); itr != mapColis.end(); ++itr) {		// |
 		benef = get<1>(itr->second);									// |
@@ -188,43 +190,87 @@ int main(){
 	}														// |
 
 	cout << "Affichage des colis dans le camion : " << endl;	// |
-	for (auto i: colisDansLeCamion) {							// | Affichage du contenu du camion
-		cout << i << endl;										// |
+	for (auto i: colisDansLeCamion) {							// | Affichage du contenu du camion et calcul du bénéfice total
+		cout << i << " ";										// |
+		beneficeTotal += get<1>(mapColis[i]);					// |
 	}															// |
 
+	cout << endl << endl << "Le benefice total sera de : " << beneficeTotal << " euros" << endl;
+
+
+	// ------------------------------------------------------------------------------------------------------------------
 
 	cout << "\t\t\t\t\tProbleme 2 : " << endl << endl;
 
 	int resteVilles = nombreDeVilles - 1;
-	auto test = find(listeVilles.begin(), listeVilles.end(), "Lens");
-	index = distance(listeVilles.begin(), test);
-	int distanceMin = 0;
+	index = 0;
+	int distanceInterMin = 1000;
+	int distanceMinVoyage = 0;
+	int saveIndex = 0;
+	vector <int> backupVilleRetour;
+	vector <string> listeVilleVoyage;
 
-	/*while (resteVilles > 0) {
-		auto min1 = *min_element(matriceDistance.at(index).begin(), matriceDistance.at(index).end() - (nombreDeVilles - index));
-		auto min2 = *min_element(matriceDistance.at(index).begin() + (index + 1), matriceDistance.at(index).end());
+	while (resteVilles >= 0) {
 
-		if (min1 < min2 && min1 != 0) {
-			distanceMin = min1;
+		distanceInterMin = 1000;
+
+		if (resteVilles == nombreDeVilles - 1) {									// si c'est la premiere itération
+						
+			listeVilleVoyage.push_back(listeVilles.at(0));
+
+			for (int i = 0; i < nombreDeVilles; i++) {
+				backupVilleRetour.push_back(matriceDistance.at(i).at(index));	// enregister les distances dans un vecteur de backup
+				
+				matriceDistance.at(i).at(index) = 0;							// mettre la colonne de la ville de départ à 0	
+			}																	
+		}																		
+		
+		for (auto valeur : matriceDistance.at(index)) {							// |
+			if (valeur <= distanceInterMin && valeur != 0) {					// |
+				distanceInterMin = valeur;										// | trouver la valeur minimale de la ligne dans distanceInterMid
+			}																	// |
+		}																		// |
+
+
+		auto trouverIndexVille = find(matriceDistance.at(index).begin(), matriceDistance.at(index).end(), distanceInterMin);	// | trouver l'index de la ville d'arriver du voyage intermédiaire 
+		index = distance(matriceDistance.at(index).begin(), trouverIndexVille);													// |
+		
+		if (resteVilles == 1) {
+			saveIndex = index;
 		}
-		else {
-			distanceMin = min2;
+
+		if (resteVilles == 0) {
+			distanceMinVoyage += backupVilleRetour.at(saveIndex);
+			listeVilleVoyage.push_back(listeVilles.at(0));
+			break;
 		}
-		cout << distanceMin << endl;
-		resteVilles--;
-	}*/
+		
+		distanceMinVoyage += distanceInterMin;		//ajouter la distance intermédiaire à la distance totale
+		listeVilleVoyage.push_back(listeVilles.at(index));
+		
 
-	cout << endl;
+		for (int i = 0; i < matriceDistance.size(); i++) {	// |
+			matriceDistance.at(i).at(index) = 0;			// | mettre la colonne de la ville d'arrivée du voyage intermédiaire à 0
+		}													// |
 
-	vector<int>testv = {1};
 
-	int minimum = *min_element(testv.begin(), testv.end());
+		resteVilles--; //reduire le nombre de villes à visiter 
+	}
 
-	cout << minimum << endl;
+	cout << "La liste des villes que nous allons visiter en prenant le plus court chemin : " << endl;
+
+	for (auto ville : listeVilleVoyage) {
+		cout << ville << " ";
+	}
+
+	cout << endl << endl;
+
+	cout << "La distance totale du voyage le plus court : " << distanceMinVoyage << endl;
+	
+	// ----- Fin de la question 3 et 4 -----
+
 
 	return 0; //fin du main
-
-	//test
 }
 
 
